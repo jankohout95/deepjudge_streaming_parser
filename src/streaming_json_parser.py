@@ -68,7 +68,7 @@ class StreamingJsonParser:
             if self.__queue.qsize() == 0:
                 self.__shared_dict["partial_data"] += self.__buffer
                 return 0
-            for index, char in enumerate(self.__buffer):
+            for char in self.__buffer:
                 temp_buffer += char
                 if not self.__shared_dict["key_mode"]:
                     self.__shared_dict["partial_data"] += temp_buffer

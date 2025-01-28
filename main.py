@@ -1,7 +1,21 @@
+import os
 import time
 import json
 from multiprocessing import Manager
 from src.streaming_json_parser import StreamingJsonParser
+
+
+def string_to_bool(s: str) -> bool:
+    # Convert to lowercase and check for truthy values
+    truthy_values = {"true", "yes", "1", "on"}
+    falsy_values = {"false", "no", "0", "off"}
+
+    if s.lower() in truthy_values:
+        return True
+    elif s.lower() in falsy_values:
+        return False
+    else:
+        raise ValueError(f"Cannot convert '{s}' to a boolean.")
 
 
 def clean_json_from_escape_chars(json_string: str) -> str:
@@ -28,8 +42,11 @@ def load_file_to_string(file_path: str) -> str:
 
 
 if __name__ == "__main__":
-    #TODO: Switch on explanatory mode to see the behavior of the parser itself.
-    EXPLANATORY_MODE = True
+    if "EXPLANATORY_MODE" in os.environ:
+        EXPLANATORY_MODE = string_to_bool(os.getenv("EXPLANATORY_MODE"))
+    else:
+        EXPLANATORY_MODE = False
+    print(EXPLANATORY_MODE)
 
     manager = Manager()
     temp_state_dict = manager.dict()
